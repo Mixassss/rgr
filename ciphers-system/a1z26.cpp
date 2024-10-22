@@ -4,11 +4,14 @@
 
 bool isLetter(char stroka) { // Проверка, является ли символ буквой
     return (stroka >= 'A' && stroka <= 'Z') || (stroka >= 'a' && stroka <= 'z');
+            (stroka >= 'А' && stroka <= 'Я') || (stroka >= 'а' && stroka <= 'я');
 }
 
 char toUpper(char stroka) { // Преобразование символа в верхний регистр
     if (stroka >= 'a' && stroka <= 'z') {
         return stroka - ('a' - 'A'); // Преобразуем в верхний регистр
+    } else if (stroka >= 'а' && stroka <= 'я') {
+        return stroka - ('а' - 'А');
     }
     return stroka; // Если уже в верхнем регистре или не буква, возвращаем без изменений
 }
@@ -25,25 +28,35 @@ vector<char> checkinputa1z26(string message) { // Функция для пров
 
 string generateCipherAlphabet(string key) { // Функция для генерации шифрующего алфавита на основе ключевого слова
     string cipherAlphabet; 
-    bool lettersUsed[26] = { false };
+    bool lettersUsed[33] = { false };
 
     for (char& stroka : key) { // Преобразуем ключ в верхний регистр и удаляем повторяющиеся буквы
         if (isLetter(stroka)) {
             stroka = toUpper(stroka);
-            if (!lettersUsed[stroka - 'A']) {
+            int index = (stroka >= 'A' && stroka <= 'Z') ? stroka - 'A' : stroka - 'А' + 26;
+            if (!lettersUsed[index]) {
                 cipherAlphabet += stroka;
-                lettersUsed[stroka - 'A'] = true;
+                lettersUsed[index] = true;
             }
         }
     }
 
     for (char stroka = 'A'; stroka <= 'Z'; stroka++) { // Добавляем оставшиеся буквы алфавита
-        if (!lettersUsed[stroka - 'A']) {
+        int index = stroka - 'A';
+        if (!lettersUsed[index]) {
             cipherAlphabet += stroka;
-            lettersUsed[stroka - 'A'] = true;
+            lettersUsed[index] = true;
         }
     }
 
+    // Добавляем оставшиеся буквы кириллицы
+    for (char stroka = 'А'; stroka <= 'я'; stroka++) {
+        int index = stroka - 'А' + 26;
+        if (!lettersUsed[index]) {
+            cipherAlphabet += stroka;
+            lettersUsed[index] = true;
+        }
+    }
     return cipherAlphabet;
 }
 
@@ -74,10 +87,9 @@ string a1z26Encryption(string message, string key) { // Функция шифр�
         }
     }
 
-    if (!encryptedMessage.empty() && encryptedMessage.back() == '-') { // Удаляем последний символ '-'
-        encryptedMessage.pop_back();
+    if (!encryptedMessage.length() == 0 && encryptedMessage[encryptedMessage.length() - 1] == '-') {
+        encryptedMessage.resize(encryptedMessage.length() - 1); // Удаляем последний символ '-'
     }
-
     return encryptedMessage;
 }
 
