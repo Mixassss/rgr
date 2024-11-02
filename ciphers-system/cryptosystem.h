@@ -10,10 +10,9 @@
 #include <windows.h>
 #include <stdexcept>
 
-// Использование пространства имен std
 using namespace std;
 
-// Объявление функций для работы с файлами
+// Объявление функции для работы с файлами
 string FileInput(const string &filename); // Функция чтения из файла
 string FileOutput(const string &filename, const string &str); // Функция записи в файл
 
@@ -22,7 +21,6 @@ void input_and_check(string &message, const string &choice_cipher, const string 
 
 // Функция для шифрования и дешифрования
 void Enc_and_Desc(const string &choice_cipher);
-
 
 // Объявление переменной пароля
 extern const string passwd;
