@@ -10,4 +10,6 @@ vector<char> checkinputbacon(const string& message);
 string baconEncryption(const string& message);
 string baconDecryption(const string& message);
 
+#include "bacon.cpp"
+
 #endif // BACON_H
