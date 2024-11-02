@@ -11,4 +11,6 @@ void generateShamirKeys();
 string shamirEncryption(const string& message);
 string shamirDecryption(const string& message);
 
+#include "shamir.cpp"
+
 #endif // SHAMIR_H
