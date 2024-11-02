@@ -3,7 +3,7 @@
 #include "a1z26.h"
 #include "shamir.h"
 
-const string passwd = "pwd";
+const string passwd = "1q2w3e";
 
 string FileInput(const string &filename) { // ф-ия вывода из файла
     string str;
@@ -139,7 +139,8 @@ int main() {
     system("cls");
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
-    srand(time(nullptr));
+    srand(static_cast<unsigned int>(time(nullptr)));
+    setlocale(LC_ALL, "Russian");
 
     string password;
     cout << "Enter the password: ";
