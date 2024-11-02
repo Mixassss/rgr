@@ -77,8 +77,8 @@ vector<char> checkinputshamir(const string& message) {
     vector<char> invalidChars;
     for (char c : message) {
         // Допустимые символы: буквы (A-Z, a-z) и пробелы
-        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == ' ') ||
-            (c >= 'А' && c <= 'Я') || (c >= 'а' && c <= 'я') || (c == ' '))) {
+        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+              (c == ' ') || (c >= 'А' && c <= 'Я') || (c >= 'а' && c <= 'я'))) {
             invalidChars.push_back(c);
         }
     }
@@ -99,9 +99,7 @@ string shamirEncryption(const string& message) {
         } else if (c >= 'А' && c <= 'Я') {
             m_numbers.push_back(c - 'А' + 27); // Преобразуем А-Я в 27-42
         } else if (c >= 'а' && c <= 'я') {
-            m_numbers.push_back(c - 'а' + 27); // Преобразуем а-я в 27-42
-        } else if (c == ' ') {
-            m_numbers.push_back(0); // Представляем пробел как 0
+            m_numbers.push_back(c - 'а' + 43); // Преобразуем а-я в 43-68
         }
     }
 
@@ -153,10 +151,12 @@ string shamirDecryption(const string &message) {
     for (int m : m_numbers) {
         if (m == 0) {
             decryptedMessage += ' ';
-        } else if (m >= 1 && m <= 26) { // Английские буквы
+        } else if (m >= 1 && m <= 26) {
             decryptedMessage += (char)('A' + m - 1);
-        } else if (m >= 27 && m <= 42) { // Русские буквы
+        } else if (m >= 27 && m <= 42) {
             decryptedMessage += (char)('А' + (m - 27));
+        } else if (m >= 43 && m <= 68) {
+            decryptedMessage += (char)('а' + (m - 43)); // Русские строчные буквы
         }
     }
 
