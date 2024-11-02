@@ -7,8 +7,9 @@ vector<char> checkinputbacon(const string& message) {
     vector<char> invalidChars;
     for (char c : message) {
         // Допустимые символы: латинские буквы A-Z и a-z
-        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || 
-            (c >= 'А' && c <= 'Я') || (c >= 'а' && c <= 'я') || c == ' ')) {
+        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+              (c >= 'А' && c <= 'Я') || (c >= 'а' && c <= 'я') || 
+              c == ' ')) {
             invalidChars.push_back(c);
         }
     }
@@ -40,7 +41,7 @@ string baconEncryption(const string& message) {
 
     string encryptedMessage;
 
-    for (char c : message) { // Преобразуем сообщение в верхний регистр и удаляем недопустимые символы
+    for (char c : message) {
         if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
             (c >= 'А' && c <= 'Я') || (c >= 'а' && c <= 'я')) {
             // Преобразуем в верхний регистр
@@ -83,7 +84,7 @@ string baconDecryption(const string& message) {
     string filteredMessage;
     for (char c : message) {
         if (c == 'A' || c == 'B' || c == 'a' || c == 'b') {
-            filteredMessage += toupper(c);
+            filteredMessage += c;
         }
     }
 
