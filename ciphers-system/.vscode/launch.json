@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/АБс-324/SQL/rgr/ciphers-system",
-      "program": "d:/АБс-324/SQL/rgr/ciphers-system/build/Debug/outDebug",
+      "cwd": "d:/rgr/rgr/ciphers-system",
+      "program": "d:/rgr/rgr/ciphers-system/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
