@@ -1,7 +1,7 @@
 #ifndef CRYPTOSYSTEM_H
 #define CRYPTOSYSTEM_H
 
-// РџРѕРґРєР»СЋС‡РµРЅРёРµ РЅРµРѕР±С…РѕРґРёРјС‹С… Р±РёР±Р»РёРѕС‚РµРє
+// Подключение необходимых библиотек
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,17 +12,17 @@
 
 using namespace std;
 
-// РћР±СЉСЏРІР»РµРЅРёРµ С„СѓРЅРєС†РёРё РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ С„Р°Р№Р»Р°РјРё
-string FileInput(const string &filename); // Р¤СѓРЅРєС†РёСЏ С‡С‚РµРЅРёСЏ РёР· С„Р°Р№Р»Р°
-string FileOutput(const string &filename, const string &str); // Р¤СѓРЅРєС†РёСЏ Р·Р°РїРёСЃРё РІ С„Р°Р№Р»
+// Объявление функции для работы с файлами
+string FileInput(string &filename); // Функция чтения из файла
+string FileOutput(string &filename, string &str); // Функция записи в файл
 
-// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РІРІРѕРґР° Рё РїСЂРѕРІРµСЂРєРё СЃРѕРѕР±С‰РµРЅРёСЏ РёР»Рё РєР»СЋС‡Р°
-void input_and_check(string &message, const string &choice_cipher, const string &message_or_key);
+// Функция для ввода и проверки сообщения или ключа
+void input_and_check(string& message, const string &choice_cipher);
 
-// Р¤СѓРЅРєС†РёСЏ РґР»СЏ С€РёС„СЂРѕРІР°РЅРёСЏ Рё РґРµС€РёС„СЂРѕРІР°РЅРёСЏ
+// Функция для шифрования и дешифрования
 void Enc_and_Desc(const string &choice_cipher);
 
-// РћР±СЉСЏРІР»РµРЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№ РїР°СЂРѕР»СЏ
+// Объявление переменной пароля
 extern const string passwd;
 
 #endif // CRYPTOSYSTEM_H

@@ -6,11 +6,8 @@
 
 using namespace std;
 
-
-vector<char> checkinputa1z26(string message);
-string a1z26Encryption(string message, string key);
-string a1z26Decryption(string message, string key);
-string generateCipherAlphabet(string key);
+string a1z26Encryption(string text);
+string a1z26Decryption(string crypto);
 
 #include "a1z26.cpp"
 

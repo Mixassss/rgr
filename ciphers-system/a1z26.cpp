@@ -2,114 +2,71 @@
 
 #include "Cryptosystem.h"
 
-// Функция для проверки ввода для шифра A1Z26
-vector<char> checkinputa1z26(string message) {
-    vector<char> invalidChars;
-    for (char c : message) {
-        // Допустимые символы: латинские буквы A-Z и a-z, пробелы
-        if (!( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == ' ')) {
-            invalidChars.push_back(c);
-        }
-    }
-    return invalidChars;
+typedef unsigned char uc;
+
+int toInt(uc c) {
+	int res = int(c);
+	if (c >= 'a' && c <= 'z') {
+		res = int(c) - 96;
+	}
+	if (c >= 'A' && c <= 'Z') {
+		res = int(c) - 38;
+	}
+	if (c >= uc('�') && c <= uc('�')) {
+		res = int(c) - 106;
+	}
+	if (c >= uc('�') && c <= uc('�')) {
+		res = int(c) - 171;
+	}
+	if (c >= ' ' && c <= '@') {
+		res = int(c) + 100;
+	}
+	return res;
 }
 
-// Функция для генерации шифрующего алфавита на основе ключевого слова
-string generateCipherAlphabet(string key) {
-    string cipherAlphabet;
-    bool lettersUsed[26] = { false };
-
-    // Преобразуем ключ в верхний регистр и удаляем повторяющиеся буквы
-    for (char& c : key) {
-        if (c >= 'A' && c <= 'Z') {
-        } else if (c >= 'a' && c <= 'z') { // Буква уже в верхнем регистре
-            c = c - ('a' - 'A'); // Преобразуем строчную букву в заглавную
-        } else {
-            continue; // Игнорируем неалфавитные символы
-        }
-        if (!lettersUsed[c - 'A']) {
-            cipherAlphabet += c;
-            lettersUsed[c - 'A'] = true;
-        }
-    }
-
-    // Добавляем оставшиеся буквы алфавита
-    for (char c = 'A'; c <= 'Z'; c++) {
-        if (!lettersUsed[c - 'A']) {
-            cipherAlphabet += c;
-        }
-    }
-
-    return cipherAlphabet;
+char toChar(string c) {
+	int sym = stoi(c);
+	uc res = 0;
+	if (sym >= 1 && sym <= 26) {
+		res = uc(sym + 96);
+	}
+	if (sym >= 27 && sym <= 53) {
+		res = uc(sym + 38);
+	}
+	if (sym >= 86 && sym <= 118) {
+		res = uc(sym + 106);
+	}
+	if (sym >= 53 && sym <= 85) {
+		res = uc(sym + 171);
+	}
+	if (sym >= 132 && sym <= 164) {
+		res = uc(sym - 100);
+	}
+	return res;
 }
 
-// Функция шифрования сообщения с помощью шифра A1Z26 и ключевого слова
-string a1z26Encryption(string message, string key) {
-    // Генерируем шифрующий алфавит на основе ключевого слова
-    string cipherAlphabet = generateCipherAlphabet(key);
-    string encryptedMessage = "";
-
-    // Преобразуем сообщение
-    for (char c : message) {
-        if (c >= 'A' && c <= 'Z') {
-            // Буква уже в верхнем регистре
-        } else if (c >= 'a' && c <= 'z') {
-            // Преобразуем строчную букву в заглавную
-            c = c - ('a' - 'A');
-        } else if (c == ' ') {
-            encryptedMessage += "/-";
-            continue;
-        } else {
-            continue; // Пропускаем неалфавитные символы
-        }
-        
-        // Находим позицию буквы в шифрующем алфавите
-        size_t pos = cipherAlphabet.find(c);
-        if (pos != string::npos) {
-            encryptedMessage += to_string(pos + 1) + "-"; // Добавляем номер буквы (от 1 до 26)
-        }
-    }
-
-    // Удаляем последний символ '-'
-    if (!encryptedMessage.empty() && encryptedMessage.back() == '-') {
-        encryptedMessage.pop_back();
-    }
-
-    return encryptedMessage;
+string a1z26Encryption(string text) {
+	string crypto;
+	for (int i = 0; i < text.size(); i++) {
+		crypto += to_string(toInt(text[i])) + '-';
+	}
+	crypto.pop_back();
+	return crypto;
 }
 
-// Функция расшифровки сообщения с помощью шифра A1Z26 и ключевого слова
-string a1z26Decryption(string message, string key) {
-    // Генерируем шифрующий алфавит на основе ключевого слова
-    string cipherAlphabet = generateCipherAlphabet(key);
-    string decryptedMessage = "";
-
-    string token;
-    istringstream tokenStream(message);
-
-    while (getline(tokenStream, token, '-')) {
-        if (token == "/") {
-        decryptedMessage += " ";
-        } else {
-        bool isNumber = true; // Проверяем, является ли токен числом
-        for (char c : token) {
-            if (c < '0' || c > '9') { // Проверяем, является ли символ цифрой
-                isNumber = false;
-                break;
-            }
-        }
-
-        if (isNumber) {
-            int num = stoi(token);
-            if (num >= 1 && num <= 26) {
-                decryptedMessage += cipherAlphabet[num - 1];
-            } else {
-                decryptedMessage += '?'; // Неизвестный номер
-            }
-            } else {
-                decryptedMessage += '?'; // Некорректный токен
-            }
-        }
-    }
-    return decryptedMessage;
-}
+string a1z26Decryption(string crypto) {
+	string text;
+	string sym;
+	for (int i = 0; i < crypto.size(); i++) {
+		if (crypto[i] != '-') {
+			sym += crypto[i];
+		}
+		else {
+			text += toChar(sym);
+			sym = "";
+		}
+	}
+	text += toChar(sym);
+	sym = "";
+	return text;
+} 

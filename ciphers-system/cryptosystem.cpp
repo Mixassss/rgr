@@ -5,7 +5,7 @@
 
 const string passwd = "1q2w3e";
 
-string FileInput(const string &filename) { // С„-РёСЏ РІС‹РІРѕРґР° РёР· С„Р°Р№Р»Р°
+string FileInput(string &filename) { // Ф-ия вывода из файла
     string str;
     ifstream input;
     input.open(filename);
@@ -18,7 +18,7 @@ string FileInput(const string &filename) { // С„-РёСЏ РІС‹РІРѕРґР° РёР· С„Р°Р№Р»
     }
 }
 
-string FileOutput(const string &filename, const string &str) { // С„-РёСЏ РІРІРѕРґР° РІ С„Р°Р№Р»
+string FileOutput(string &filename, string &str) { // ф-ия ввода в файл
     ofstream output;
     output.open(filename);
     if (output.is_open()) {
@@ -30,12 +30,8 @@ string FileOutput(const string &filename, const string &str) { // С„-РёСЏ РІРІРѕ
     }
 }
 
-void input_and_check(string& message, const string &choice_cipher, const string &message_or_key) { // С„-РёСЏ РІРІРѕРґР° СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РєР»Р°РІРёР°С‚СѓСЂС‹ Рё РµРіРѕ РїСЂРѕРІРµСЂРєР°
-    if (message_or_key == "message") {
-        cout << "Enter the message: ";
-    } else {
-        cout << "Enter the key word: ";
-    }
+void input_and_check(string& message, const string &choice_cipher) { // ф-ия ввода сообщения с клавиатуры и его проверка
+    cout << "Enter the message: ";
     cin.ignore();
     while (true) {
         getline(cin, message);
@@ -43,9 +39,14 @@ void input_and_check(string& message, const string &choice_cipher, const string 
         if (choice_cipher == "Bacon") {
             errorinput = checkinputbacon(message);
         } else if (choice_cipher == "A1Z26") {
-            errorinput = checkinputa1z26(message);
+            for (char c : message) { //Перебираем каждый символ
+                uc character = static_cast<uc>(c);
+                if (toInt(character) < 0) { // Проверяем на допустимые значения
+                    errorinput.push_back(c);
+                }
+            }
         } else {
-            // Р”Р»СЏ С€РёС„СЂР° РЁР°РјРёСЂР° РїСЂРѕРІРµСЂРєР° РјРѕР¶РµС‚ Р±С‹С‚СЊ РёРЅРѕР№
+            // Для шифра Шамира проверка может быть иной
             errorinput = checkinputshamir(message);
         }
         if (!errorinput.empty()) {
@@ -55,10 +56,8 @@ void input_and_check(string& message, const string &choice_cipher, const string 
             }
             cout << endl << "Please try again: ";
         } else {
-            if (message_or_key == "message") {
+            if (message == "message") {
                 cout << "Message accepted!" << endl;
-            } else {
-                cout << "Key word accepted!" << endl;
             }
             break;
         }
@@ -66,42 +65,41 @@ void input_and_check(string& message, const string &choice_cipher, const string 
 }
 
 void Enc_and_Desc(const string &choice_cipher) {
-    string message, wordkey, filename;
+    string message, filename;
 
     if (choice_cipher == "Bacon") {
-        input_and_check(message, "Bacon", "message");
+        input_and_check(message, "Bacon");
     } else if (choice_cipher == "A1Z26") {
-        input_and_check(message, "A1Z26", "message");
-        input_and_check(wordkey, "A1Z26", "key");
+        input_and_check(message, "A1Z26");
     } else if (choice_cipher == "Shamir") {
-        input_and_check(message, "Shamir", "message");
-        // Р“РµРЅРµСЂР°С†РёСЏ РєР»СЋС‡РµР№ РґР»СЏ С€РёС„СЂР° РЁР°РјРёСЂР°
+        input_and_check(message, "Shamir");
+        // Генерация ключей для шифра Шамира
         generateShamirKeys();
     }
     cout << "Enter the filename to save the message: ";
     cin >> filename;
     FileOutput(filename, message);
 
-    // РЁРР¤Р РћР’РљРђ //
+    // ШИФРОВКА //
     message = FileInput(filename);
     string Encrypted;
     if (choice_cipher == "Bacon") {
         Encrypted = baconEncryption(message);
     } else if (choice_cipher == "A1Z26") {
-        Encrypted = a1z26Encryption(message, wordkey);
+        Encrypted = a1z26Encryption(message);
     } else if (choice_cipher == "Shamir") {
         Encrypted = shamirEncryption(message);
     }
     cout << "Encrypted message: " << Encrypted << endl;
     cout << "Enter the filename to save the encrypted message: ";
     cin >> filename;
-    string check = FileOutput(filename, Encrypted); // Р·Р°РїРёСЃС‹РІР°РµРј РІ С„Р°Р№Р»
+    string check = FileOutput(filename, Encrypted); // записываем в файл
     if (check != "Completed") {
         cout << "Error, unable to open the file " << filename << "!" << endl;
     } else {
         cout << "Message saved to file " << filename << "!" << endl;
 
-        // Р Р°СЃС€РёС„СЂРѕРІРєР° //
+        // Расшифровка //
         cout << "Decrypt the message? Enter /y/ or /Y/ to confirm: ";
         char choice;
         cin >> choice;
@@ -115,14 +113,14 @@ void Enc_and_Desc(const string &choice_cipher) {
                 if (choice_cipher == "Bacon") {
                     Decrypted = baconDecryption(Encrypted);
                 } else if (choice_cipher == "A1Z26") {
-                    Decrypted = a1z26Decryption(Encrypted, wordkey);
+                    Decrypted = a1z26Decryption(Encrypted);
                 } else if (choice_cipher == "Shamir") {
                     Decrypted = shamirDecryption(Encrypted);
                 }
                 cout << "Decrypted message: " << Decrypted << endl;
                 cout << "Enter the filename to save the decrypted message: ";
                 cin >> filename;
-                check = FileOutput(filename, Decrypted); // Р·Р°РїРёСЃС‹РІР°РµРј РІ С„Р°Р№Р»
+                check = FileOutput(filename, Decrypted); // записываем в файл
                 if (check != "Completed") {
                     cout << "Error, unable to open the file " << filename << "!" << endl;
                 } else {
@@ -137,10 +135,9 @@ void Enc_and_Desc(const string &choice_cipher) {
 
 int main() {
     system("cls");
-    SetConsoleCP(65001);
-    SetConsoleOutputCP(65001);
-    srand(static_cast<unsigned int>(time(nullptr)));
-    setlocale(LC_ALL, "Russian");
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    srand(time(0));
 
     string password;
     cout << "Enter the password: ";
@@ -169,14 +166,14 @@ int main() {
     while (true) {
         int choice;
         while (true) {
-            try { // РѕР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РєРё
+            try { // обработка ошибки
                 cout << "\nSelect the cipher number: ";
                 cin >> choice;
                 if (cin.fail()) {
                     throw invalid_argument("Enter a number only!");
                 }
                 break;
-            } catch (invalid_argument& ex) { // Р»РѕРІРёРј РѕС€РёР±РєСѓ, РІС‹РІРѕРґРёРј РµС‘ РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ Рё Р·Р°РїСЂР°С€РёРІР°РµРј РІРІРѕРґ Р·Р°РЅРѕРІРѕ
+            } catch (invalid_argument& ex) { // ловим ошибку, выводим её пользователю и запрашиваем ввод заново
                 cin.clear();
                 cin.ignore();
                 cout << "Error: " << ex.what() << endl;

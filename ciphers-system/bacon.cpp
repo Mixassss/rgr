@@ -2,24 +2,23 @@
 
 #include "Cryptosystem.h"
 
-// –§—É–Ω–∫—Ü–∏—è –¥–ª—è –ø—Ä–æ–≤–µ—Ä–∫–∏ –≤–≤–æ–¥–∞ –¥–ª—è —à–∏—Ñ—Ä–∞ –ë—ç–∫–æ–Ω–∞
+// ‘ÛÌÍˆËˇ ‰Îˇ ÔÓ‚ÂÍË ‚‚Ó‰‡ ‰Îˇ ¯ËÙ‡ ¡˝ÍÓÌ‡
 vector<char> checkinputbacon(const string& message) {
     vector<char> invalidChars;
     for (char c : message) {
-        // –î–æ–ø—É—Å—Ç–∏–º—ã–µ —Å–∏–º–≤–æ–ª—ã: –ª–∞—Ç–∏–Ω—Å–∫–∏–µ –±—É–∫–≤—ã A-Z –∏ a-z
+        // ƒÓÔÛÒÚËÏ˚Â ÒËÏ‚ÓÎ˚: Î‡ÚËÌÒÍËÂ Ë ÍËËÎÎË˜ÂÒÍËÂ ·ÛÍ‚˚, ÍËËÎÎË˜ÂÒÍËÂ ·ÛÍ‚˚, ÔÓ·ÂÎ
         if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
-              (c >= '–ê' && c <= '–Ø') || (c >= '–∞' && c <= '—è') || 
-              c == ' ')) {
+              (c >= '¿' && c <= 'ﬂ') || (c >= '‡' && c <= 'ˇ') || 
+               c == ' ')) {
             invalidChars.push_back(c);
         }
     }
     return invalidChars;
 }
 
-// –§—É–Ω–∫—Ü–∏—è —à–∏—Ñ—Ä–æ–≤–∞–Ω–∏—è —Å–æ–æ–±—â–µ–Ω–∏—è —Å –ø–æ–º–æ—â—å—é —à–∏—Ñ—Ä–∞ –ë—ç–∫–æ–Ω–∞
-string baconEncryption(const string& message) {
-    // –°–æ–∑–¥–∞–µ–º —Ç–∞–±–ª–∏—Ü—É —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤–∏—è –±—É–∫–≤ –∏ –∫–æ–¥–æ–≤ –ë—ç–∫–æ–Ω–∞
+string baconEncryption(string& message) {
     map<char, string> baconMap = {
+        // English
         {'A', "AAAAA"}, {'B', "AAAAB"}, {'C', "AAABA"}, {'D', "AAABB"},
         {'E', "AABAA"}, {'F', "AABAB"}, {'G', "AABBA"}, {'H', "AABBB"},
         {'I', "ABAAA"}, {'J', "ABAAB"}, {'K', "ABABA"}, {'L', "ABABB"},
@@ -27,37 +26,48 @@ string baconEncryption(const string& message) {
         {'Q', "BAAAA"}, {'R', "BAAAB"}, {'S', "BAABA"}, {'T', "BAABB"},
         {'U', "BABAA"}, {'V', "BABAB"}, {'W', "BABBA"}, {'X', "BABBB"},
         {'Y', "BBAAA"}, {'Z', "BBAAB"},
-        // –†—É—Å—Å–∫–∏–µ –±—É–∫–≤—ã
-        {'–ê', "AAAAA"}, {'–ë', "AAAAB"}, {'–í', "AAABA"}, {'–ì', "AAABB"},
-        {'–î', "AABAA"}, {'–ï', "AABAB"}, {'–Å', "AABBA"}, {'–ñ', "AABBB"},
-        {'–ó', "ABAAA"}, {'–ò', "ABAAB"}, {'–ô', "ABABA"}, {'–ö', "ABABB"},
-        {'–õ', "ABBAA"}, {'–ú', "ABBAB"}, {'–ù', "ABBBA"}, {'–û', "ABBBB"},
-        {'–ü', "BAAAA"}, {'–†', "BAAAB"}, {'–°', "BAABA"}, {'–¢', "BAABB"},
-        {'–£', "BABAA"}, {'–§', "BABAB"}, {'–•', "BABBA"}, {'–¶', "BABBB"},
-        {'–ß', "BBAAA"}, {'–®', "BBAAB"}, {'–©', "BBAAC"}, {'–™', "BBAAD"},
-        {'–´', "BBAAE"}, {'–¨', "BBAAF"}, {'–≠', "BBAAG"}, {'–Æ', "BBAAH"},
-        {'–Ø', "BBAAI"}
+        {'a', "aaaaa"}, {'b', "aaaab"}, {'c', "aaaba"}, {'d', "aaabb"},
+        {'e', "aabaa"}, {'f', "aabab"}, {'g', "aabba"}, {'h', "aabbb"},
+        {'i', "abaaa"}, {'j', "abaab"}, {'k', "ababa"}, {'l', "ababb"},
+        {'m', "abbaaa"}, {'n', "abbab"}, {'o', "abbba"}, {'p', "abbbb"},
+        {'q', "baaaa"}, {'r', "baaab"}, {'s', "baaba"}, {'t', "baabb"},
+        {'u', "babaa"}, {'v', "babab"}, {'w', "babba"}, {'x', "babbb"},
+        {'y', "bbaaa"}, {'z', "bbaab"},
+        
+        {'¿', "¿¿¿¿¿"}, {'¡', "¿¿¿¿B",}, {'¬', "¿¿¿B¿"}, {'√', "¿¿¿BB"},
+        {'ƒ', "¿¿B¿¿"}, {'≈', "¿¿B¿B"}, {'®', "¿¿B¿B"}, {'∆', "¿¿BB¿"},
+        {'«', "¿¿BBB"}, {'»', "¿B¿¿¿"}, {'…', "¿B¿¿B"}, {' ', "¿B¿B¿"},
+        {'À', "¿B¿BB"}, {'Ã', "¿BB¿¿"}, {'Õ', "¿BB¿B"}, {'Œ', "¿BBB¿"},
+        {'œ', "¿BBBB"}, {'–', "B¿¿¿¿"}, {'—', "B¿¿¿B"}, {'“', "B¿¿B¿"},
+        {'”', "B¿¿BB"}, {'‘', "B¿B¿¿"}, {'’', "B¿B¿B"}, {'÷', "B¿BB¿"},
+        {'◊', "B¿BBB"}, {'ÿ', "BB¿¿¿"}, {'Ÿ', "BB¿¿B"}, {'⁄', "BB¿B¿"},
+        {'€', "BB¿BB"}, {'‹', "BBB¿¿"}, {'›', "BBB¿B"}, {'ﬁ', "BBBB¿"},
+        {'ﬂ', "BBBBB"},
+        {'‡', "‡‡‡‡‡"}, {'·', "‡‡‡‡b",}, {'‚', "‡‡‡b‡"}, {'„', "‡‡‡bb"},
+        {'‰', "‡‡b‡‡"}, {'Â', "‡‡b‡b"}, {'∏', "‡‡b‡b"}, {'Ê', "‡‡bb‡"},
+        {'Á', "‡‡bbb"}, {'Ë', "‡b‡‡‡"}, {'È', "‡b‡‡b"}, {'Í', "‡b‡b‡"},
+        {'Î', "‡b‡bb"}, {'Ï', "‡bb‡‡"}, {'Ì', "‡bb‡b"}, {'Ó', "‡bbb‡"},
+        {'Ô', "‡bbbb"}, {'', "b‡‡‡‡"}, {'Ò', "b‡‡‡b"}, {'Ú', "b‡‡b‡"},
+        {'Û', "b‡‡bb"}, {'Ù', "b‡b‡‡"}, {'ı', "b‡b‡b"}, {'ˆ', "b‡bb‡"},
+        {'˜', "b‡bbb"}, {'¯', "bb‡‡‡"}, {'˘', "bb‡‡b"}, {'˙', "bb‡b‡"},
+        {'˚', "bb‡bb"}, {'¸', "bbb‡‡"}, {'˝', "bbb‡b"}, {'˛', "bbbb‡"},
+        {'ˇ', "bbbbb"}
     };
 
-    string encryptedMessage;
-
+    string encryptedMessage;  
     for (char c : message) {
-        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
-            (c >= '–ê' && c <= '–Ø') || (c >= '–∞' && c <= '—è')) {
-            // –ü—Ä–µ–æ–±—Ä–∞–∑—É–µ–º –≤ –≤–µ—Ä—Ö–Ω–∏–π —Ä–µ–≥–∏—Å—Ç—Ä
-            if (c >= 'a' && c <= 'z') {
-                c = c - ('a' - 'A');  // –ü—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏–µ –≤ –≤–µ—Ä—Ö–Ω–∏–π —Ä–µ–≥–∏—Å—Ç—Ä
-            }
+        if (baconMap.find(c) != baconMap.end()) {
             encryptedMessage += baconMap[c];
+        } else {
+            encryptedMessage += c;
         }
     }
 
     return encryptedMessage;
 }
 
-// –§—É–Ω–∫—Ü–∏—è —Ä–∞—Å—à–∏—Ñ—Ä–æ–≤–∫–∏ —Å–æ–æ–±—â–µ–Ω–∏—è —Å –ø–æ–º–æ—â—å—é —à–∏—Ñ—Ä–∞ –ë—ç–∫–æ–Ω–∞
+// ‘ÛÌÍˆËˇ ‡Ò¯ËÙÓ‚ÍË ÒÓÓ·˘ÂÌËˇ Ò ÔÓÏÓ˘¸˛ ¯ËÙ‡ ¡˝ÍÓÌ‡
 string baconDecryption(const string& message) {
-    // –°–æ–∑–¥–∞–µ–º –æ–±—Ä–∞—Ç–Ω—É—é —Ç–∞–±–ª–∏—Ü—É —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤–∏—è –∫–æ–¥–æ–≤ –ë—ç–∫–æ–Ω–∞ –∏ –±—É–∫–≤
     map<string, char> baconMap = {
         {"AAAAA", 'A'}, {"AAAAB", 'B'}, {"AAABA", 'C'}, {"AAABB", 'D'},
         {"AABAA", 'E'}, {"AABAB", 'F'}, {"AABBA", 'G'}, {"AABBB", 'H'},
@@ -66,40 +76,50 @@ string baconDecryption(const string& message) {
         {"BAAAA", 'Q'}, {"BAAAB", 'R'}, {"BAABA", 'S'}, {"BAABB", 'T'},
         {"BABAA", 'U'}, {"BABAB", 'V'}, {"BABBA", 'W'}, {"BABBB", 'X'},
         {"BBAAA", 'Y'}, {"BBAAB", 'Z'},
-        // –†—É—Å—Å–∫–∏–µ –±—É–∫–≤—ã
-        {"AAAAA", '–ê'}, {"AAAAB", '–ë'}, {"AAABA", '–í'}, {"AAABB", '–ì'},
-        {"AABAA", '–î'}, {"AABAB", '–ï'}, {"AABBA", '–Å'}, {"AABBB", '–ñ'},
-        {"ABAAA", '–ó'}, {"ABAAB", '–ò'}, {"ABABA", '–ô'}, {"ABABB", '–ö'},
-        {"ABBAA", '–õ'}, {"ABBAB", '–ú'}, {"ABBBA", '–ù'}, {"ABBBB", '–û'},
-        {"BAAAA", '–ü'}, {"BAAAB", '–†'}, {"BAABA", '–°'}, {"BAABB", '–¢'},
-        {"BABAA", '–£'}, {"BABAB", '–§'}, {"BABBA", '–•'}, {"BABBB", '–¶'},
-        {"BBAAA", '–ß'}, {"BBAAB", '–®'}, {"BBAAC", '–©'}, {"BBAAD", '–™'},
-        {"BBAAE", '–´'}, {"BBAAF", '–¨'}, {"BBAAG", '–≠'}, {"BBAAH", '–Æ'},
-        {"BBAAI", '–Ø'}
+        {"aaaaa", 'a'}, {"aaaab", 'b'}, {"aaaba", 'c'}, {"aaabb", 'd'},
+        {"aabaa", 'e'}, {"aabab", 'f'}, {"aabba", 'g'}, {"aabbb", 'h'},
+        {"abaaa", 'i'}, {"abaab", 'j'}, {"ababa", 'k'}, {"ababb", 'l'},
+        {"abbaaa", 'm'}, {"abbab", 'n'}, {"abbba", 'o'}, {"abbbb", 'p'},
+        {"baaaa", 'q'}, {"baaab", 'r'}, {"baaba", 's'}, {"baabb", 't'},
+        {"babaa", 'u'}, {"babab", 'v'}, {"babba", 'w'}, {"babbb", 'x'},
+        {"bbaaa", 'y'}, {"bbaab", 'z'},
+        {"¿¿¿¿¿", '¿'}, {"¿¿¿¿B", '¡'}, {"¿¿¿B¿", '¬'}, {"¿¿¿BB", '√'},
+        {"¿¿B¿¿", 'ƒ'}, {"¿¿B¿B", '≈'}, {"¿¿B¿B", '®'}, {"¿¿BB¿", '∆'},
+        {"¿¿BBB", '«'}, {"¿B¿¿¿", '»'}, {"¿B¿¿B", '…'}, {"¿B¿B¿", ' '},
+        {"¿B¿BB", 'À'}, {"¿BB¿¿", 'Ã'}, {"¿BB¿B", 'Õ'}, {"¿BBB¿", 'Œ'},
+        {"¿BBBB", 'œ'}, {"B¿¿¿¿", '–'}, {"B¿¿¿B", '—'}, {"B¿¿B¿", '“'},
+        {"B¿¿BB", '”'}, {"B¿B¿¿", '‘'}, {"B¿B¿B", '’'}, {"B¿BB¿", '÷'},
+        {"B¿BBB", '◊'}, {"BB¿¿¿", 'ÿ'}, {"BB¿¿B", 'Ÿ'}, {"BB¿B¿", '⁄'},
+        {"BB¿BB", '€'}, {"BBB¿¿", '‹'}, {"BBB¿B", '›'}, {"BBBB¿", 'ﬁ'},
+        {"BBBBB", 'ﬂ'},
+        {"‡‡‡‡‡", '‡'}, {"‡‡‡‡b", '·'}, {"‡‡‡b‡", '‚'}, {"‡‡‡bb", '„'},
+        {"‡‡b‡‡", '‰'}, {"‡‡b‡b", 'Â'}, {"‡‡b‡b", '∏'}, {"‡‡bb‡", 'Ê'},
+        {"‡‡bbb", 'Á'}, {"‡b‡‡‡", 'Ë'}, {"‡b‡‡b", 'È'}, {"‡b‡b‡", 'Í'},
+        {"‡b‡bb", 'Î'}, {"‡bb‡‡", 'Ï'}, {"‡bb‡b", 'Ì'}, {"‡bbb‡", 'Ó'},
+        {"‡bbbb", 'Ô'}, {"b‡‡‡‡", ''}, {"b‡‡‡b", 'Ò'}, {"b‡‡b‡", 'Ú'},
+        {"b‡‡bb", 'Û'}, {"b‡b‡‡", 'Ù'}, {"b‡b‡b", 'ı'}, {"b‡bb‡", 'ˆ'},
+        {"b‡bbb", '˜'}, {"bb‡‡‡", '¯'}, {"bb‡‡b", '˘'}, {"bb‡b‡", '˙'},
+        {"bb‡bb", '˚'}, {"bbb‡‡", '¸'}, {"bbb‡b", '˝'}, {"bbbb‡", '˛'},
+        {"bbbbb", 'ˇ'}
     };
 
     string decryptedMessage;
-
-    // –£–¥–∞–ª—è–µ–º –ø—Ä–æ–±–µ–ª—ã –∏ –Ω–µ–¥–æ–ø—É—Å—Ç–∏–º—ã–µ —Å–∏–º–≤–æ–ª—ã –∏–∑ —Å–æ–æ–±—â–µ–Ω–∏—è
     string filteredMessage;
+
+    // ”‰‡ÎÂÌËÂ ÌÂ‰ÓÔÛÒÚËÏ˚ı ÒËÏ‚ÓÎÓ‚
     for (char c : message) {
-        if (c == 'A' || c == 'B' || c == 'a' || c == 'b') {
+        if (c == 'A' || c == 'B' || c == 'a' || c == 'b' || c == '¿' || c == 'B' || c == '‡' || c == 'b') {
             filteredMessage += c;
         }
     }
 
-    // –ü—Ä–æ–≤–µ—Ä—è–µ–º, —á—Ç–æ –¥–ª–∏–Ω–∞ —Å–æ–æ–±—â–µ–Ω–∏—è –∫—Ä–∞—Ç–Ω–∞ 5
-    if (filteredMessage.length() % 5 != 0) {
-        return "Error: Invalid encrypted message length.";
-    }
-
-    // –†–∞–∑–±–∏–≤–∞–µ–º —Å–æ–æ–±—â–µ–Ω–∏–µ –Ω–∞ –±–ª–æ–∫–∏ –ø–æ 5 —Å–∏–º–≤–æ–ª–æ–≤ –∏ —Ä–∞—Å—à–∏—Ñ—Ä–æ–≤—ã–≤–∞–µ–º
+    // ƒÂ¯ËÙÓ‚Í‡
     for (size_t i = 0; i < filteredMessage.length(); i += 5) {
         string code = filteredMessage.substr(i, 5);
         if (baconMap.find(code) != baconMap.end()) {
             decryptedMessage += baconMap[code];
         } else {
-            decryptedMessage += '?'; // –ù–µ–∏–∑–≤–µ—Å—Ç–Ω—ã–π –∫–æ–¥
+            decryptedMessage += '?'; // ÕÂËÁ‚ÂÒÚÌ˚È ÍÓ‰
         }
     }
 

@@ -7,7 +7,7 @@
 using namespace std;
 
 vector<char> checkinputbacon(const string& message);
-string baconEncryption(const string& message);
+string baconEncryption(string& message);
 string baconDecryption(const string& message);
 
 #include "bacon.cpp"
