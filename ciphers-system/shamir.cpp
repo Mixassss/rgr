@@ -63,7 +63,7 @@ long long modPow(long long base, long long exponent, long long modulus) {
 // Функция для генерации ключей для алгоритма Шамира
 void generateShamirKeys() {
     // Выбираем простое число p
-    p = 257; // Пример простого числа
+    p = 257;
 
     // Подбираем секретный Алисы cA
     cA = 5;
@@ -143,8 +143,7 @@ string shamirDecryption(const string &message) {
         try {
             int C = stoi(token);
             C_numbers.push_back(C);
-        } catch (invalid_argument&) {
-            // Если встретился некорректный токен, можно обработать ошибку
+        } catch (invalid_argument&) { // Если встретился некорректный токен, можно обработать ошибку
         }
     }
 
